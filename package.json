@@ -4,9 +4,15 @@
   "main": "index.js",
   "author": "lxy <liuxueyong@agora.io>",
   "license": "MIT",
+  "scripts": {
+    "prepare": "husky install"
+  },
   "devDependencies": {
+    "@commitlint/cli": "^12.1.1",
+    "@commitlint/config-conventional": "^12.1.1",
     "commitizen": "^4.2.3",
-    "cz-conventional-changelog": "^3.3.0"
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^6.0.0"
   },
   "config": {
     "commitizen": {
