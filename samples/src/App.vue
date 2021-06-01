@@ -3,10 +3,9 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable */ 
 import { defineComponent, ref, onMounted } from 'vue'
-// import axios from '../../src/index'
-import axios from 'axios'
+import axios from '../../src'
+// import axios from 'axios'
 
 export default defineComponent({
   name: 'axiosTestPage',
@@ -16,13 +15,17 @@ export default defineComponent({
     onMounted(async() => {
       try {
         const res = await axios({
-          method: 'get',
+          method: 'post',
           url: 'http://localhost:8080/api/test',
-          params: {
+          data: {
             page: 1,
             postId: [4, 5, 6],
             name: null,
-            obj: 111
+            obj: 111,
+            persion: {
+              name: 'liu',
+              age: 12
+            }
           }
         })
 

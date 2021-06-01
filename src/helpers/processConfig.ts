@@ -1,11 +1,14 @@
-/* eslint-disable */
-import { AxiosConfig } from "../types"
-import { buildURL } from './url'
+import { AxiosConfig } from '../types'
+import { transformURL } from './url'
+import { transformRequestData } from './data'
+import { transformHeaders } from './header'
 
 const processConfig = (config: AxiosConfig) => {
-  const { url, params = {} } = config
+  const { url, params = {}, data = null, headers = {} } = config
 
-  config.url = buildURL(url, params)
+  config.url = transformURL(url, params)
+  config.headers = transformHeaders(headers, data)
+  config.data = transformRequestData(data)
 }
 
 export default processConfig

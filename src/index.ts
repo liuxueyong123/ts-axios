@@ -1,5 +1,3 @@
-/* eslint-disable */ 
- 
 import processConfig from './helpers/processConfig'
 import { AxiosConfig } from './types'
 import { xhr } from './xhr'

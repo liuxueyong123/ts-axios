@@ -5,4 +5,5 @@ export interface AxiosConfig {
   method?: RequestMethod
   params?: any
   data?: any
+  headers?: Record<any, any>
 }
