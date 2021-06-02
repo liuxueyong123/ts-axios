@@ -1,9 +1,9 @@
-import { AxiosConfig } from '../types'
+import { AxiosRequestConfig } from '../types'
 import { transformURL } from './url'
 import { transformRequestData } from './data'
 import { transformHeaders } from './header'
 
-const processConfig = (config: AxiosConfig) => {
+const processConfig = (config: AxiosRequestConfig) => {
   const { url, params = {}, data = null, headers = {} } = config
 
   config.url = transformURL(url, params)

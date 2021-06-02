@@ -1,8 +1,8 @@
 import processConfig from './helpers/processConfig'
-import { AxiosConfig } from './types'
+import { AxiosRequestConfig } from './types'
 import { xhr } from './xhr'
 
-const axios = (config: AxiosConfig) => {
+const axios = (config: AxiosRequestConfig) => {
   processConfig(config)
 
   return xhr(config)
