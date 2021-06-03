@@ -1,11 +1,10 @@
-import processConfig from './helpers/processConfig'
-import { AxiosRequestConfig } from './types'
-import { xhr } from './xhr'
+import AxiosClass from './core/Axios'
+import { AxiosInstance } from './types'
+export * from './types'
 
-const axios = (config: AxiosRequestConfig) => {
-  processConfig(config)
+const instance = new AxiosClass()
 
-  return xhr(config)
-}
+const axios: unknown = AxiosClass.prototype.request.bind(instance)
+Object.setPrototypeOf(axios, instance)
 
-export default axios
+export default axios as AxiosInstance

@@ -14,22 +14,20 @@ export default defineComponent({
 
     onMounted(async() => {
       try {
-        const res = await axios({
-          method: 'post',
-          url: 'http://localhost:8080/api/test',
-          data: {
-            page: 1,
-            postId: [4, 5, 6],
-            name: null,
-            obj: 111,
-            persion: {
-              name: 'liu',
-              age: 12
+        const res = await axios.request<string>(
+          {
+            url: 'http://localhost:8080/api/test',
+            method: 'get',
+            params: {
+              page: 1,
+              postId: [4, 5, 6],
+              name: null,
+              obj: 111,
             }
           }
-        })
+        )
 
-        console.log(res)
+        console.log(res.data)
 
         responseRef.value = res
       } catch(e) {
