@@ -1,9 +1,47 @@
-import { AxiosRequestConfig, RequestMethod } from '../types'
+import { isString } from '../helpers/util'
+import { AxiosInterceptors, AxiosRequestConfig, RequestMethod, Axios as IAxios, ChainPromise } from '../types'
 import dispatchRequest from './dispatchRequest'
+import InterceptorManage from './Interceptor'
 
-class Axios {
-  request (config: AxiosRequestConfig) {
-    return dispatchRequest(config)
+class Axios implements IAxios {
+  interceptors: AxiosInterceptors
+
+  constructor () {
+    this.interceptors = {
+      request: new InterceptorManage(),
+      response: new InterceptorManage()
+    }
+  }
+
+  request (url: string | AxiosRequestConfig, config: Partial<AxiosRequestConfig> = {}) {
+    if (isString(url)) {
+      config.url = url
+    } else {
+      config = url
+    }
+
+    const chain: ChainPromise[] = [
+      {
+        resolve: dispatchRequest,
+        reject: undefined
+      }
+    ]
+
+    this.interceptors.request.forEach((interceptor) => {
+      chain.unshift(interceptor)
+    })
+
+    this.interceptors.response.forEach((interceptor) => {
+      chain.push(interceptor)
+    })
+
+    // TODO: 干掉这个 any
+    let promise: any = Promise.resolve(config as AxiosRequestConfig)
+    for (const interceptor of chain) {
+      promise = promise.then(interceptor.resolve, interceptor.reject)
+    }
+
+    return promise
   }
 
   get (url: string, config?: Partial<AxiosRequestConfig>) {

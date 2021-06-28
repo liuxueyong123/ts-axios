@@ -26,8 +26,34 @@ export interface AxiosError extends Error {
   response?: AxiosResponse
 }
 
+export type AxiosInterceptorResolvedFn<T> = (val: T) => T
+export type AxiosInterceptorRejectFn = (error: any) => any
+
+export interface AxiosInterceptor<T> {
+  resolve: AxiosInterceptorResolvedFn<T>
+  reject: AxiosInterceptorRejectFn
+}
+
+export interface AxiosInterceptorManage<T> {
+  use(resolve: AxiosInterceptorResolvedFn<T>, reject: AxiosInterceptorRejectFn): number
+  eject(interceptor: number): void
+  forEach(callback: (val: AxiosInterceptor<T>) => void): void
+}
+
+export interface AxiosInterceptors {
+  request: AxiosInterceptorManage<AxiosRequestConfig>
+  response: AxiosInterceptorManage<AxiosResponse>
+}
+
+export interface ChainPromise {
+  resolve: AxiosInterceptorResolvedFn<AxiosRequestConfig> | AxiosInterceptorResolvedFn<AxiosResponse> | ((config: AxiosRequestConfig) => Promise<AxiosResponse<any>>)
+  reject?: AxiosInterceptorRejectFn
+}
+
 export interface Axios {
-  request<T = any>(config: AxiosRequestConfig): Promise<AxiosResponse<T>>
+  interceptors: AxiosInterceptors
+
+  request<T = any>(url: string | AxiosRequestConfig, config?: Partial<AxiosRequestConfig>): Promise<AxiosResponse<T>>
 
   get<T = any>(url: string, config?: Partial<AxiosRequestConfig>): Promise<AxiosResponse<T>>
 

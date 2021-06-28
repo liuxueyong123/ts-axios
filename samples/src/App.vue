@@ -14,9 +14,25 @@ export default defineComponent({
 
     onMounted(async() => {
       try {
+
+        axios.interceptors.request.use((config) => {
+          console.log('interceptors2', config)
+          return config
+        }, (error) => {
+          console.log(error)
+        })
+
+        axios.interceptors.request.use((config) => {
+          config.url = "http://localhost:8080/api/test"
+          console.log('interceptors1', config)
+          return config
+        }, (error) => {
+          console.log(error)
+        })
+
         const res = await axios.request<string>(
           {
-            url: 'http://localhost:8080/api/test',
+            url: 'http://localhost:8080/api/t',
             method: 'get',
             params: {
               page: 1,
