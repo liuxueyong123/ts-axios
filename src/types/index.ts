@@ -10,6 +10,16 @@ export interface AxiosRequestConfig {
   responseType?: XMLHttpRequestResponseType
 }
 
+// export interface AxiosDefaultRequestConfig extends AxiosRequestConfig {
+//   url: string
+//   method: RequestMethod
+//   params: any
+//   data?: any
+//   headers: Record<any, any>
+//   timeout: number
+//   responseType?: XMLHttpRequestResponseType
+// }
+
 export interface AxiosResponse<T = any> {
   config: AxiosRequestConfig
   data: T
@@ -52,6 +62,7 @@ export interface ChainPromise {
 
 export interface Axios {
   interceptors: AxiosInterceptors
+  defaults: Partial<AxiosRequestConfig>
 
   request<T = any>(url: string | AxiosRequestConfig, config?: Partial<AxiosRequestConfig>): Promise<AxiosResponse<T>>
 

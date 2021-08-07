@@ -9,3 +9,22 @@ export const isDate = (val: any): val is Date => {
 export const isString = (val: any): val is string => {
   return typeof val === 'string'
 }
+
+export const deepMerge = (...objs: Record<any, any>[]) => {
+  const result = Object.create(null)
+
+  for (const obj of objs) {
+    if (!obj) continue
+
+    for (const [key, value] of Object.entries(obj)) {
+      if (!isObject(value) || !isObject(result[key])) {
+        result[key] = value
+        continue
+      }
+
+      result[key] = deepMerge(result[key], value)
+    }
+  }
+
+  return result
+}

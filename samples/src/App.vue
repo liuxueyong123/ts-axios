@@ -16,7 +16,7 @@ export default defineComponent({
       try {
 
         axios.interceptors.request.use((config) => {
-          console.log('interceptors2', config)
+          // console.log('interceptors2', config)
           return config
         }, (error) => {
           console.log(error)
@@ -24,11 +24,13 @@ export default defineComponent({
 
         axios.interceptors.request.use((config) => {
           config.url = "http://localhost:8080/api/test"
-          console.log('interceptors1', config)
+          // console.log('interceptors1', config)
           return config
         }, (error) => {
           console.log(error)
         })
+
+        // axios.defaults.headers.common['test'] = 123
 
         const res = await axios.request<string>(
           {
@@ -39,11 +41,14 @@ export default defineComponent({
               postId: [4, 5, 6],
               name: null,
               obj: 111,
+            },
+            headers: {
+              test2: '321'
             }
           }
         )
 
-        console.log(res.data)
+        // console.log(res.data)
 
         responseRef.value = res
       } catch(e) {

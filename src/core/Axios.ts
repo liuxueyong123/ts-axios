@@ -2,11 +2,15 @@ import { isString } from '../helpers/util'
 import { AxiosInterceptors, AxiosRequestConfig, RequestMethod, Axios as IAxios, ChainPromise } from '../types'
 import dispatchRequest from './dispatchRequest'
 import InterceptorManage from './Interceptor'
+import mergeConfig from './mergeConfig'
 
 class Axios implements IAxios {
   interceptors: AxiosInterceptors
+  defaults: Partial<AxiosRequestConfig>
 
-  constructor () {
+  constructor (initialConfig: Partial<AxiosRequestConfig>) {
+    this.defaults = initialConfig
+
     this.interceptors = {
       request: new InterceptorManage(),
       response: new InterceptorManage()
@@ -19,6 +23,8 @@ class Axios implements IAxios {
     } else {
       config = url
     }
+
+    const mergedConfig = mergeConfig(this.defaults, config as AxiosRequestConfig)
 
     const chain: ChainPromise[] = [
       {
@@ -36,7 +42,7 @@ class Axios implements IAxios {
     })
 
     // TODO: 干掉这个 any
-    let promise: any = Promise.resolve(config as AxiosRequestConfig)
+    let promise: any = Promise.resolve(mergedConfig)
     for (const interceptor of chain) {
       promise = promise.then(interceptor.resolve, interceptor.reject)
     }
