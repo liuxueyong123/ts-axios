@@ -1,3 +1,4 @@
+import { transformRequestData, transformResponseData } from '../helpers/data'
 import { AxiosRequestConfig } from '../types'
 
 const defaults: Partial<AxiosRequestConfig> = {
@@ -7,7 +8,19 @@ const defaults: Partial<AxiosRequestConfig> = {
     common: {
       Accept: 'application/json, text/plain, */*'
     }
-  }
+  },
+
+  transformRequest: [
+    (data: any) => {
+      return transformRequestData(data)
+    }
+  ],
+
+  transformResponse: [
+    function (data: any): any {
+      return transformResponseData(data)
+    }
+  ]
   // url: '',
   // params: '',
   // data: '',

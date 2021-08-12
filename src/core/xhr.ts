@@ -1,4 +1,4 @@
-import { transformResponseData } from '../helpers/data'
+import { transformResponseData } from '../helpers/processConfig'
 import { parseHeaders } from '../helpers/header'
 import AxiosError from '../helpers/error'
 import { AxiosRequestConfig, AxiosResponse } from '../types'
@@ -16,7 +16,7 @@ export const xhr = (config: AxiosRequestConfig): Promise<AxiosResponse> => {
 
     xhr.onload = () => {
       const responseHeaders = parseHeaders(xhr.getAllResponseHeaders())
-      const responseData = transformResponseData(xhr.response)
+      const responseData = transformResponseData(xhr.response, config.transformResponse)
       const response: AxiosResponse = {
         data: responseData,
         status: xhr.status,

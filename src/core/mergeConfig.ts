@@ -23,20 +23,15 @@ const deepMergeStrategy = (val1: any, val2: any): any => {
   }
 }
 
-const getMergeFunctionMap = () => {
-  const mergeFunctionMap = new Map<keyof AxiosRequestConfig, Function>([
-    ['url', fromVal2Strategy],
-    ['params', fromVal2Strategy],
-    ['data', fromVal2Strategy],
-    ['headers', deepMergeStrategy]
-  ])
-
-  return mergeFunctionMap
-}
+const mergeFunctionMap = new Map<keyof AxiosRequestConfig, Function>([
+  ['url', fromVal2Strategy],
+  ['params', fromVal2Strategy],
+  ['data', fromVal2Strategy],
+  ['headers', deepMergeStrategy]
+])
 
 const mergeConfig = (config1: Partial<AxiosRequestConfig>, config2: AxiosRequestConfig) => {
   const config: Partial<AxiosRequestConfig> = Object.create(null)
-  const mergeFunctionMap = getMergeFunctionMap()
 
   // 对传进来的配置每一项都进行处理
   for (const configKey of Object.keys(config2)) {

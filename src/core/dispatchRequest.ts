@@ -1,4 +1,4 @@
-import processConfig from '../helpers/processConfig'
+import { processConfig } from '../helpers/processConfig'
 import { AxiosRequestConfig } from '../types'
 import { xhr } from './xhr'
 

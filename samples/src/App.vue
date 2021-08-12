@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
-import axios from '../../src'
+import axios, { AxiosTransformer } from '../../src'
 // import axios from 'axios'
 
 export default defineComponent({
@@ -14,14 +14,6 @@ export default defineComponent({
 
     onMounted(async() => {
       try {
-
-        axios.interceptors.request.use((config) => {
-          // console.log('interceptors2', config)
-          return config
-        }, (error) => {
-          console.log(error)
-        })
-
         axios.interceptors.request.use((config) => {
           config.url = "http://localhost:8080/api/test"
           // console.log('interceptors1', config)
@@ -35,12 +27,27 @@ export default defineComponent({
         const res = await axios.request<string>(
           {
             url: 'http://localhost:8080/api/t',
-            method: 'get',
+            method: 'post',
+            transformRequest: [(function(data) {
+              console.log('transformRequest', data)
+              return data
+            }), ...(axios.defaults.transformRequest as AxiosTransformer[])],
+            transformResponse: [...(axios.defaults.transformResponse as AxiosTransformer[]), function(data) {
+              if (typeof data === 'object') {
+                data.b = 2
+              }
+              return data
+            }],
             params: {
               page: 1,
               postId: [4, 5, 6],
               name: null,
               obj: 111,
+            },
+            data: {
+              page: 1,
+              postId: [4, 5, 6],
+              name: null,
             },
             headers: {
               test2: '321'
@@ -48,7 +55,7 @@ export default defineComponent({
           }
         )
 
-        // console.log(res.data)
+        console.log(res.data)
 
         responseRef.value = res
       } catch(e) {

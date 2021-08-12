@@ -1,15 +1,17 @@
-import { AxiosRequestConfig } from '../types'
+import { AxiosRequestConfig, AxiosTransformer } from '../types'
 import { transformURL } from './url'
-import { transformRequestData } from './data'
 import { flattenHeaders, transformHeaders } from './header'
+import transform from '../core/transform'
 
-const processConfig = (config: AxiosRequestConfig) => {
+export const processConfig = (config: AxiosRequestConfig) => {
   const { url, params = {}, data = null, headers = {}, method } = config
 
   config.url = transformURL(url, params)
   config.headers = transformHeaders(headers, data)
-  config.data = transformRequestData(data)
+  config.data = transform(data, config.headers, config.transformRequest)
   config.headers = flattenHeaders(config.headers, method!)
 }
 
-export default processConfig
+export const transformResponseData = (data: any, transformResponse?: AxiosTransformer | AxiosTransformer[]) => {
+  return transform(data, '', transformResponse)
+}

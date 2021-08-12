@@ -1,5 +1,8 @@
 export type RequestMethod = 'get' | 'GET' | 'post' | 'POST' | 'put' | 'PUT' | 'delete' | 'DELETE' | 'head' | 'HEAD' | 'patch' | 'PATCH' | 'options' | 'OPTIONS'
 
+export interface AxiosTransformer {
+  (data: any, headers?: any): any
+}
 export interface AxiosRequestConfig {
   url: string
   method?: RequestMethod
@@ -8,6 +11,8 @@ export interface AxiosRequestConfig {
   headers?: Record<any, any>
   timeout?: number
   responseType?: XMLHttpRequestResponseType
+  transformRequest?: AxiosTransformer | AxiosTransformer[]
+  transformResponse?: AxiosTransformer | AxiosTransformer[]
 }
 
 // export interface AxiosDefaultRequestConfig extends AxiosRequestConfig {
