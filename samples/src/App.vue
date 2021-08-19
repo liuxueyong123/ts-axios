@@ -13,54 +13,90 @@ export default defineComponent({
     const responseRef = ref<any>(1)
 
     onMounted(async() => {
-      try {
-        axios.interceptors.request.use((config) => {
-          config.url = "http://localhost:8080/api/test"
-          // console.log('interceptors1', config)
-          return config
-        }, (error) => {
-          console.log(error)
-        })
+      const axios1 = axios.create({})
+      const axios2 = axios.create({})
 
-        // axios.defaults.headers.common['test'] = 123
+      axios.interceptors.request.use((config) => {
+        config.data.a = 'axios'
+        return config
+      }, (error) => {
+        console.log(error)
+      })
 
-        const res = await axios.request<string>(
-          {
-            url: 'http://localhost:8080/api/t',
-            method: 'post',
-            transformRequest: [(function(data) {
-              console.log('transformRequest', data)
-              return data
-            }), ...(axios.defaults.transformRequest as AxiosTransformer[])],
-            transformResponse: [...(axios.defaults.transformResponse as AxiosTransformer[]), function(data) {
-              if (typeof data === 'object') {
-                data.b = 2
-              }
-              return data
-            }],
-            params: {
-              page: 1,
-              postId: [4, 5, 6],
-              name: null,
-              obj: 111,
-            },
-            data: {
-              page: 1,
-              postId: [4, 5, 6],
-              name: null,
-            },
-            headers: {
-              test2: '321'
-            }
-          }
-        )
+      axios1.interceptors.request.use((config) => {
+        config.data.a = 'axios1'
+        return config
+      }, (error) => {
+        console.log(error)
+      })
 
-        console.log(res.data)
+      axios2.interceptors.request.use((config) => {
+        config.data.a = 'axios2'
+        return config
+      }, (error) => {
+        console.log(error)
+      })
 
-        responseRef.value = res
-      } catch(e) {
-        console.error(e)
-      }
+      const res = await axios.request<string>(
+        {
+          url: 'http://localhost:8080/api/test',
+          method: 'post',
+          params: {
+            page: 1,
+            postId: [4, 5, 6],
+            name: null,
+            obj: 111,
+          },
+          data: {
+            page: 1,
+            postId: [4, 5, 6],
+            name: null,
+          },
+        }
+      )
+
+      const res1 = await axios1.request<string>(
+        {
+          url: 'http://localhost:8080/api/test',
+          method: 'post',
+          params: {
+            page: 1,
+            postId: [4, 5, 6],
+            name: null,
+            obj: 111,
+          },
+          data: {
+            page: 1,
+            postId: [4, 5, 6],
+            name: null,
+          },
+        }
+      )
+
+      const res2 = await axios2.request<string>(
+        {
+          url: 'http://localhost:8080/api/test',
+          method: 'post',
+          params: {
+            page: 1,
+            postId: [4, 5, 6],
+            name: null,
+            obj: 111,
+          },
+          data: {
+            page: 1,
+            postId: [4, 5, 6],
+            name: null,
+          },
+        }
+      )
+
+      console.log(res.data)
+      console.log(res1.data)
+      console.log(res2.data)
+
+      responseRef.value = res1
+
     })
 
     return { responseRef }

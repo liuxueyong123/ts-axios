@@ -88,4 +88,5 @@ export interface Axios {
 
 export interface AxiosInstance extends Axios {
   <T = any>(config: AxiosRequestConfig): Promise<AxiosResponse<T>>
+  create: (config: Partial<AxiosRequestConfig>) => AxiosInstance
 }
