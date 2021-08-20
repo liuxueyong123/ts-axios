@@ -5,13 +5,20 @@ import { AxiosRequestConfig, AxiosResponse } from '../types'
 
 export const xhr = (config: AxiosRequestConfig): Promise<AxiosResponse> => {
   return new Promise((resolve, reject) => {
-    const { method = 'get', url, data = null, headers = {}, timeout } = config
+    const { method = 'get', url, data = null, headers = {}, timeout, cancelToken } = config
 
     const xhr = new XMLHttpRequest()
     xhr.open(method.toLowerCase(), url, true)
 
     for (const [key, value] of Object.entries(headers)) {
       xhr.setRequestHeader(key, value)
+    }
+
+    if (cancelToken) {
+      cancelToken.promise.then(reason => {
+        xhr.abort()
+        reject(reason)
+      })
     }
 
     xhr.onload = () => {

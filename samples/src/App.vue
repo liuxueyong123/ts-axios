@@ -6,6 +6,9 @@
 import { defineComponent, ref, onMounted } from 'vue'
 import axios, { AxiosTransformer } from '../../src'
 // import axios from 'axios'
+const isCancel = axios.isCancel
+const CancelToken = axios.CancelToken;
+const source = CancelToken.source();
 
 export default defineComponent({
   name: 'axiosTestPage',
@@ -13,31 +16,7 @@ export default defineComponent({
     const responseRef = ref<any>(1)
 
     onMounted(async() => {
-      const axios1 = axios.create({})
-      const axios2 = axios.create({})
-
-      axios.interceptors.request.use((config) => {
-        config.data.a = 'axios'
-        return config
-      }, (error) => {
-        console.log(error)
-      })
-
-      axios1.interceptors.request.use((config) => {
-        config.data.a = 'axios1'
-        return config
-      }, (error) => {
-        console.log(error)
-      })
-
-      axios2.interceptors.request.use((config) => {
-        config.data.a = 'axios2'
-        return config
-      }, (error) => {
-        console.log(error)
-      })
-
-      const res = await axios.request<string>(
+      axios.request<string>(
         {
           url: 'http://localhost:8080/api/test',
           method: 'post',
@@ -52,51 +31,19 @@ export default defineComponent({
             postId: [4, 5, 6],
             name: null,
           },
+          cancelToken: source.token
         }
-      )
-
-      const res1 = await axios1.request<string>(
-        {
-          url: 'http://localhost:8080/api/test',
-          method: 'post',
-          params: {
-            page: 1,
-            postId: [4, 5, 6],
-            name: null,
-            obj: 111,
-          },
-          data: {
-            page: 1,
-            postId: [4, 5, 6],
-            name: null,
-          },
+      ).then().catch(e => {
+        if(isCancel(e)) {
+          console.log('canceled')
+          console.log(e.message)
+          return
         }
-      )
 
-      const res2 = await axios2.request<string>(
-        {
-          url: 'http://localhost:8080/api/test',
-          method: 'post',
-          params: {
-            page: 1,
-            postId: [4, 5, 6],
-            name: null,
-            obj: 111,
-          },
-          data: {
-            page: 1,
-            postId: [4, 5, 6],
-            name: null,
-          },
-        }
-      )
+        console.log(e)
+      })
 
-      console.log(res.data)
-      console.log(res1.data)
-      console.log(res2.data)
-
-      responseRef.value = res1
-
+      source.cancel('request canceled')
     })
 
     return { responseRef }

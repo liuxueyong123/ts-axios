@@ -1,8 +1,11 @@
+import CancelToken, { Cancel } from '../core/CancelToken'
+
 export type RequestMethod = 'get' | 'GET' | 'post' | 'POST' | 'put' | 'PUT' | 'delete' | 'DELETE' | 'head' | 'HEAD' | 'patch' | 'PATCH' | 'options' | 'OPTIONS'
 
 export interface AxiosTransformer {
   (data: any, headers?: any): any
 }
+
 export interface AxiosRequestConfig {
   url: string
   method?: RequestMethod
@@ -13,6 +16,7 @@ export interface AxiosRequestConfig {
   responseType?: XMLHttpRequestResponseType
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]
+  cancelToken?: CancelToken
 }
 
 // export interface AxiosDefaultRequestConfig extends AxiosRequestConfig {
@@ -88,5 +92,8 @@ export interface Axios {
 
 export interface AxiosInstance extends Axios {
   <T = any>(config: AxiosRequestConfig): Promise<AxiosResponse<T>>
-  create: (config: Partial<AxiosRequestConfig>) => AxiosInstance
+  create: (config?: Partial<AxiosRequestConfig>) => AxiosInstance
+  CancelToken: typeof CancelToken
+  Cancel: typeof Cancel
+  isCancel: (attr: any) => attr is Cancel
 }
