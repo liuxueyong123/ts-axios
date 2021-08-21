@@ -8,7 +8,6 @@ import axios, { AxiosTransformer } from '../../src'
 // import axios from 'axios'
 const isCancel = axios.isCancel
 const CancelToken = axios.CancelToken;
-const source = CancelToken.source();
 
 export default defineComponent({
   name: 'axiosTestPage',
@@ -16,6 +15,8 @@ export default defineComponent({
     const responseRef = ref<any>(1)
 
     onMounted(async() => {
+      const source = CancelToken.source();
+
       axios.request<string>(
         {
           url: 'http://localhost:8080/api/test',

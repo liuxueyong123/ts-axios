@@ -1,3 +1,5 @@
+import { AxiosRequestConfig } from '../types'
+
 interface Canceler {
   (message?: string): void
 }
@@ -14,6 +16,12 @@ export const isCancel = (attr: any): attr is Cancel => {
   return attr instanceof Cancel
 }
 
+export const throwIfCancellationRequested = (config: AxiosRequestConfig) => {
+  if (config.cancelToken) {
+    config.cancelToken.throwIfRequested()
+  }
+}
+
 class CancelToken {
   promise: Promise<Cancel>
   reason?: Cancel
@@ -25,6 +33,7 @@ class CancelToken {
     })
 
     executor(message => {
+      // 多次执行 cancel 函数仅第一次生效
       if (this.reason) {
         return
       }
@@ -40,6 +49,12 @@ class CancelToken {
     return {
       token,
       cancel
+    }
+  }
+
+  throwIfRequested () {
+    if (this.reason) {
+      throw this.reason
     }
   }
 }
