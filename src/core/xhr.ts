@@ -5,7 +5,7 @@ import { AxiosRequestConfig, AxiosResponse } from '../types'
 
 export const xhr = (config: AxiosRequestConfig): Promise<AxiosResponse> => {
   return new Promise((resolve, reject) => {
-    const { method = 'get', url, data = null, headers = {}, timeout, cancelToken } = config
+    const { method = 'get', url, data = null, headers = {}, timeout, cancelToken, withCredentials } = config
 
     const xhr = new XMLHttpRequest()
     xhr.open(method.toLowerCase(), url, true)
@@ -19,6 +19,10 @@ export const xhr = (config: AxiosRequestConfig): Promise<AxiosResponse> => {
         xhr.abort()
         reject(reason)
       })
+    }
+
+    if (withCredentials) {
+      xhr.withCredentials = true
     }
 
     xhr.onload = () => {
