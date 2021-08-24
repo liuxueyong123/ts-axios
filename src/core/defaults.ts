@@ -4,6 +4,8 @@ import { AxiosRequestConfig } from '../types'
 const defaults: Partial<AxiosRequestConfig> = {
   method: 'get',
   timeout: 0,
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
   headers: {
     common: {
       Accept: 'application/json, text/plain, */*'

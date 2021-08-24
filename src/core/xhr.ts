@@ -1,18 +1,16 @@
+import Cookies from 'js-cookie'
 import { transformResponseData } from '../helpers/processConfig'
 import { parseHeaders } from '../helpers/header'
 import AxiosError from '../helpers/error'
 import { AxiosRequestConfig, AxiosResponse } from '../types'
+import { isURLSameOrigin } from '../helpers/url'
 
 export const xhr = (config: AxiosRequestConfig): Promise<AxiosResponse> => {
   return new Promise((resolve, reject) => {
-    const { method = 'get', url, data = null, headers = {}, timeout, cancelToken, withCredentials } = config
+    const { method = 'get', url, data = null, headers = {}, timeout, cancelToken, withCredentials, xsrfCookieName, xsrfHeaderName } = config
 
     const xhr = new XMLHttpRequest()
     xhr.open(method.toLowerCase(), url, true)
-
-    for (const [key, value] of Object.entries(headers)) {
-      xhr.setRequestHeader(key, value)
-    }
 
     if (cancelToken) {
       cancelToken.promise.then(reason => {
@@ -23,6 +21,18 @@ export const xhr = (config: AxiosRequestConfig): Promise<AxiosResponse> => {
 
     if (withCredentials) {
       xhr.withCredentials = true
+    }
+
+    if ((withCredentials || isURLSameOrigin(url)) && xsrfCookieName) {
+      const xsrfValue = Cookies.get(xsrfCookieName)
+
+      if (xsrfValue) {
+        headers[xsrfHeaderName!] = xsrfValue
+      }
+    }
+
+    for (const [key, value] of Object.entries(headers)) {
+      xhr.setRequestHeader(key, value)
     }
 
     xhr.onload = () => {

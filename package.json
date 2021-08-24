@@ -10,6 +10,7 @@
   "devDependencies": {
     "@commitlint/cli": "^12.1.1",
     "@commitlint/config-conventional": "^12.1.1",
+    "@types/js-cookie": "^2.2.7",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "commitizen": "^4.2.3",
@@ -27,6 +28,7 @@
     }
   },
   "dependencies": {
+    "js-cookie": "^3.0.0",
     "typescript": "^4.2.4"
   }
 }

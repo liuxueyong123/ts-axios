@@ -56,3 +56,10 @@ export const transformURL = (url: string, params: Object) => {
 
   return newURL
 }
+
+export const isURLSameOrigin = (requestURL: string): boolean => {
+  const currentOrigin = new URL(window.location.href).origin
+  const requestOrigin = new URL(requestURL).origin
+
+  return currentOrigin === requestOrigin
+}

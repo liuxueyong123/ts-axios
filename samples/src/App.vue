@@ -4,10 +4,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
-import axios, { AxiosTransformer } from '../../src'
+import axios from '../../src'
 // import axios from 'axios'
-const isCancel = axios.isCancel
-const CancelToken = axios.CancelToken;
 
 export default defineComponent({
   name: 'axiosTestPage',
@@ -15,7 +13,8 @@ export default defineComponent({
     const responseRef = ref<any>(1)
 
     onMounted(async() => {
-      const source = CancelToken.source();
+      // const instance = axios.create({})
+      // const source = CancelToken.source();
 
       axios.request<string>(
         {
@@ -32,19 +31,8 @@ export default defineComponent({
             postId: [4, 5, 6],
             name: null,
           },
-          cancelToken: source.token
         }
-      ).then().catch(e => {
-        if(isCancel(e)) {
-          console.log('canceled')
-          console.log(e.message)
-          return
-        }
-
-        console.log(e)
-      })
-
-      source.cancel('request canceled')
+      )
     })
 
     return { responseRef }
