@@ -10,6 +10,10 @@ export const isString = (val: any): val is string => {
   return typeof val === 'string'
 }
 
+export const isFormData = (val: any): val is FormData => {
+  return val instanceof FormData
+}
+
 export const deepMerge = (...objs: Record<any, any>[]) => {
   const result = Object.create(null)
 
