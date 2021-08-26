@@ -31,6 +31,10 @@ export default defineComponent({
             postId: [4, 5, 6],
             name: null,
           },
+          auth: {
+            username: 'liuxueyong',
+            password: '1997qaz'
+          }
         }
       )
     })

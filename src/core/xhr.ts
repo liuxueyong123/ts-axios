@@ -85,7 +85,11 @@ const handleXSRFToken = (config: AxiosRequestConfig) => {
 }
 
 const processHeader = (xhr: XMLHttpRequest, config: AxiosRequestConfig) => {
-  const { data = null, headers = {} } = config
+  const { data = null, headers = {}, auth } = config
+
+  if (auth) {
+    headers.Authorization = 'Basic ' + window.btoa(auth.username + ':' + auth.password)
+  }
 
   if (isFormData(data)) {
     delete headers['Content-Type']

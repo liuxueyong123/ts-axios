@@ -27,7 +27,8 @@ const mergeFunctionMap = new Map<keyof AxiosRequestConfig, Function>([
   ['url', fromVal2Strategy],
   ['params', fromVal2Strategy],
   ['data', fromVal2Strategy],
-  ['headers', deepMergeStrategy]
+  ['headers', deepMergeStrategy],
+  ['auth', deepMergeStrategy]
 ])
 
 const mergeConfig = (config1: Partial<AxiosRequestConfig>, config2: AxiosRequestConfig) => {
