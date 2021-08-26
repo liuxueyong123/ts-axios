@@ -1,4 +1,4 @@
-import { isObject, isDate } from './util'
+import { isObject, isDate, isURLSearchParams } from './util'
 
 const encodeObject = (obj: Object) => {
   return encodeURIComponent(JSON.stringify(obj))
@@ -40,9 +40,22 @@ const pushParamToList = (key: string, value: any, paramsList: string[]) => {
   paramsList.push(`${key}=${value}`)
 }
 
-export const transformURL = (url: string, params: Object) => {
-  const paramList: string[] = []
+export const transformURL = (url: string, params: Object, paramsSerializer?: (val: any) => void) => {
+  if (!params) {
+    return url
+  }
 
+  if (paramsSerializer) {
+    const serializedParams = paramsSerializer(params)
+    return url.includes('?') ? `${url}&${serializedParams}` : `${url}?${serializedParams}`
+  }
+
+  if (isURLSearchParams(params)) {
+    const serializedParams = params.toString()
+    return url.includes('?') ? `${url}&${serializedParams}` : `${url}?${serializedParams}`
+  }
+
+  const paramList: string[] = []
   // 保留原有 params 参数
   if (url.includes('?')) {
     paramList.push(...url.split('?')[1].split('&'))

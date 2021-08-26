@@ -14,6 +14,10 @@ export const isFormData = (val: any): val is FormData => {
   return val instanceof FormData
 }
 
+export const isURLSearchParams = (val: any): val is URLSearchParams => {
+  return val instanceof URLSearchParams
+}
+
 export const deepMerge = (...objs: Record<any, any>[]) => {
   const result = Object.create(null)
 

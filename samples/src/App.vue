@@ -4,6 +4,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
+import qs from 'qs'
 import axios from '../../src'
 // import axios from 'axios'
 
@@ -26,6 +27,7 @@ export default defineComponent({
             name: null,
             obj: 111,
           },
+          // params: new URLSearchParams('a=b&c=d'),
           data: {
             page: 1,
             postId: [4, 5, 6],
@@ -37,7 +39,10 @@ export default defineComponent({
           },
           validateStatus: (status) => {
             return (status >= 200 && status < 300) || status === 403
-          }
+          },
+          // paramsSerializer: (params) => {
+          //   return qs.stringify(params, { arrayFormat: 'brackets' })
+          // }
         }
       )
 
