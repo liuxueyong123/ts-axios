@@ -1,3 +1,4 @@
+import { AxiosRequestConfig } from '../types'
 import { isObject, isDate, isURLSearchParams } from './util'
 
 const encodeObject = (obj: Object) => {
@@ -40,7 +41,24 @@ const pushParamToList = (key: string, value: any, paramsList: string[]) => {
   paramsList.push(`${key}=${value}`)
 }
 
-export const transformURL = (url: string, params: Object, paramsSerializer?: (val: any) => void) => {
+// A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).
+// RFC 3986 defines scheme name as a sequence of characters beginning with a letter and followed
+// by any combination of letters, digits, plus, period, or hyphen.
+const isAbsoluteURL = (val: string) => {
+  return /^([a-z][a-z+-.\d]*:)?\/\//i.test(val)
+}
+
+const combineURL = (baseURL: string, relativeURL?: string): string => {
+  return relativeURL ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '') : baseURL
+}
+
+export const transformURL = (config: AxiosRequestConfig) => {
+  let { url, params = {}, paramsSerializer, baseURL } = config
+
+  if (baseURL && !isAbsoluteURL(url)) {
+    url = combineURL(baseURL, url)
+  }
+
   if (!params) {
     return url
   }

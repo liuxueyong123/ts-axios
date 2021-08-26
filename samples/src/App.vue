@@ -17,9 +17,14 @@ export default defineComponent({
       // const instance = axios.create({})
       // const source = CancelToken.source();
 
-      const res = await axios.request<string>(
+      const instance = axios.create({
+        baseURL: 'http://localhost:8080/'
+      })
+
+      const res = await instance.request<string>(
         {
-          url: 'http://localhost:8080/api/test',
+          // baseURL: 'http://localhost:8080',
+          url: '/api/test',
           method: 'post',
           params: {
             page: 1,

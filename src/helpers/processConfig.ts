@@ -4,9 +4,9 @@ import { flattenHeaders, transformHeaders } from './header'
 import transform from '../core/transform'
 
 export const processConfig = (config: AxiosRequestConfig) => {
-  const { url, params = {}, data = null, headers = {}, method, paramsSerializer } = config
+  const { data = null, headers = {}, method } = config
 
-  config.url = transformURL(url, params, paramsSerializer)
+  config.url = transformURL(config)
   config.headers = transformHeaders(headers, data)
   config.data = transform(data, config.headers, config.transformRequest)
   config.headers = flattenHeaders(config.headers, method!)
