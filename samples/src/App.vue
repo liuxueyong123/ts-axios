@@ -16,7 +16,7 @@ export default defineComponent({
       // const instance = axios.create({})
       // const source = CancelToken.source();
 
-      axios.request<string>(
+      const res = await axios.request<string>(
         {
           url: 'http://localhost:8080/api/test',
           method: 'post',
@@ -34,9 +34,14 @@ export default defineComponent({
           auth: {
             username: 'liuxueyong',
             password: '1997qaz'
+          },
+          validateStatus: (status) => {
+            return (status >= 200 && status < 300) || status === 403
           }
         }
       )
+
+      console.log(res)
     })
 
     return { responseRef }

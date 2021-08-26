@@ -25,9 +25,10 @@ export interface AxiosRequestConfig {
   withCredentials?: boolean
   xsrfCookieName?: string
   xsrfHeaderName?: string
+  auth?: AxiosBasicCredentials
   onDownloadProgress?: (e: ProgressEvent) => void
   onUploadProgress?: (e: ProgressEvent) => void
-  auth?: AxiosBasicCredentials
+  validateStatus?: (status: number) => boolean
 }
 
 // export interface AxiosDefaultRequestConfig extends AxiosRequestConfig {

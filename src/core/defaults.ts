@@ -22,7 +22,11 @@ const defaults: Partial<AxiosRequestConfig> = {
     function (data: any): any {
       return transformResponseData(data)
     }
-  ]
+  ],
+
+  validateStatus: (status: number) => {
+    return (status >= 200 && status < 300) || status === 304
+  }
   // url: '',
   // params: '',
   // data: '',

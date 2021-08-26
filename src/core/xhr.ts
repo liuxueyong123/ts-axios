@@ -44,7 +44,7 @@ const addEvents = (xhr: XMLHttpRequest, config: AxiosRequestConfig, resolve: (va
       request: xhr
     }
 
-    if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
+    if (config.validateStatus && config.validateStatus(xhr.status)) {
       resolve(response)
     }
 
